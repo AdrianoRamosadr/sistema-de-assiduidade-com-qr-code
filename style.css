@@ -1,0 +1,148 @@
+
+/*Configuração de todos os elementos do HTML*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*Configuração Cabeçalho*/
+
+header{
+    display: flex;
+    background-color: #1e242b;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 15px 10px;
+    
+
+}
+
+header *{
+    margin-left: 10px;
+}
+
+header .fa-qrcode{
+    font-size: 22px;
+    color: white;
+    margin-right: 3px;
+    margin-top: 4px;
+}
+header h3{
+    color: white;
+    font-size: 25px;
+    margin-bottom: 3px;
+    padding-right: 40%;
+}
+
+header img{
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+ @media screen and (min-width: 420px) and (max-width: 850px){
+    header h3{
+        font-size: 14px;
+    }
+
+    header .fa-qrcode{
+        font-size: 14px;
+    }
+} 
+
+/*Configuração tela de login*/
+
+.container-formulario{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90.4vh;
+}
+
+.infoLogin{
+    line-height: 1.8;
+    text-align: center;
+}
+.infoLogin h2, h3{
+    font-weight: 500;
+}
+
+.formulario{
+    width: 390px;
+    height: 530px;
+    box-shadow: 2px 3px 3px 3px #2323231b;
+    color: black;
+    padding: 19px;
+    border-radius: 5px;
+
+
+}
+
+
+div.campo, .btnEntrar{
+    margin-top: 20px;
+}
+
+.emailInstitucional{
+    font-size: 14px;
+    color: #1e242b9c;
+}
+
+.formulario a{
+    text-decoration: none;
+}
+
+.esqueciPasse a{
+    display: block;
+    text-align: center;
+    padding: 6px;
+    text-decoration: underline !important;
+    color: rgba(13,110,253);;
+}
+
+input:hover{
+    box-shadow: 1px 0px 2px 1px #3498dbc0;
+    transition: .9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+select:hover{
+    box-shadow: 1px 0px 2px 1px #3498dbc0;
+    transition: .9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+input, button, select{
+    width: 100%;
+    padding: 9px;
+border: 1px solid #23232324;
+border-radius: 4px;
+margin-top: 5px;
+outline: none;
+font-size: 16px;
+}
+
+input::placeholder{
+    font-size: 16px;
+}
+
+.btnEntrar a{
+color: white;
+
+}
+
+.entrar{
+    background-color: #3498db;
+    cursor: pointer;
+border-color: #3498db;
+font-size: 15px;
+transition: .9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+}
+.entrar:hover{
+    background-color: #0366a8fc;
+border-color: #3498db;
+
+}

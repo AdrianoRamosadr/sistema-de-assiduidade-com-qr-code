@@ -1,0 +1,164 @@
+
+/*Configuração de todos os elementos do HTML*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/*Configuração Cabeçalho*/
+
+header{
+    display: flex;
+    background-color: #1e242b;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 15px 10px;
+    
+
+}
+
+header *{
+    margin-left: 10px;
+}
+
+header .fa-qrcode{
+    font-size: 24px;
+    color: white;
+    margin-right: 3px;
+    margin-top: 4px;
+}
+header h3{
+    color: white;
+    font-size: 25px;
+    margin-bottom: 3px;
+    padding-right: 40%;
+}
+
+header img{
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+header .tipoUser {
+    color: white;
+    cursor: pointer;
+}
+
+table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    
+}
+
+.mensagem-vazia {
+    text-align: center;
+    color: #666;
+    
+    
+}
+
+.cards-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.meudados, .estatisticas{
+    width: 600px;
+   box-shadow: 1px 2px 3px 1px #23223349;
+   margin-right: 20px;
+   border-radius: 10px;
+   height: 300px;
+}
+
+.nome, .turma, .email, .id{
+    font-weight: 400;
+}
+
+.item-estatisticas, .info{
+    padding: 15px;
+}
+
+.item-estatisticas{
+    display: flex;
+    justify-content: center;
+}
+
+.item{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+   
+    width: 100%;
+    margin: 10px;
+    margin-top: 50px !important;
+}
+.item-estatisticas span{
+color: rgb(17, 149, 231);
+font-size: 2.5rem;
+font-weight: 700;   
+}
+
+.info{
+    background-color: rgba(255, 255, 255, 0.21);
+    width: 98%;
+    margin: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    line-height: 2.6;
+}
+
+.cabecalho{
+    background-color: #1e242b;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 2px;
+}
+
+.container-presenca{
+    width: 800px;
+    
+    box-shadow: 1px 2px 3px 1px #23223349;
+    border-radius: 10px !important;
+    
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th {
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    
+}
+
+.card-body{
+    padding: 20px !important;
+}

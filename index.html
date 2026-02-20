@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Assiduidade</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h3><i class="fas fa-qrcode me-2" aria-hidden="true"></i> Controle de Assiduidade - Colégio Santa Ana & Noesa</h3>
+        <img src="logoIniciasNomesDesenvolvedores.png" alt="logoIniciasNomesDesenvolvedores">
+    </header>
+
+    <div class="container-formulario">
+        <form action="" class="formulario" id="loginForm">
+            <div class="infoLogin">
+                <h2>Colégio Santa Ana & Noesa</h2>
+                <h3>Acesso ao Sistema</h3>
+            </div>
+            
+            <!-- Campo de email (será ocultado quando selecionar Aluno) -->
+            <div class="campo" id="campoEmail">
+                <label for="Email">E-mail</label>
+                <br>
+                <input type="email" name="Email" id="Email" placeholder="seu.email@ate.com"> <br>
+                <span class="emailInstitucional">Use seu email institucional</span>
+            </div>
+            
+            <div class="campo">
+                <label for="Senha">Senha</label>
+                <br>
+                <input type="password" name="Senha" id="Senha" placeholder="Sua Senha">
+            </div>
+            
+            <div class="campo">
+                <label for="SeleUser">Tipo de Usuário</label> <br>
+                <select name="SeleUser" id="SeleUser">
+                    <option value="">Selecionar...</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Professor">Porteiro</option>
+                    <option value="Aluno">Aluno</option>
+                </select>
+            </div>
+            
+            <div class="btnEntrar">
+                <button type="button" class="entrar" id="btnEntrar">Entrar</button>
+            </div>
+            
+            <!-- Mensagem de erro -->
+            <div id="mensagemErro" class="alert alert-danger mt-3" style="display: none;"></div>
+            
+            <!-- Informações de teste (remover em produção) -->
+            <!-- <div class="alert alert-info mt-3">
+                <small>
+                    <strong>Admin:</strong> admin@colegio.com / admin123<br>
+                    <strong>Porteiro:</strong> porteiro@colegio.com / porteiro123<br>
+                    <strong>Aluno:</strong> Use a senha gerada pelo admin
+                </small> 
+            </div> -->
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectUser = document.getElementById('SeleUser');
+            const campoEmail = document.getElementById('campoEmail');
+            const btnEntrar = document.getElementById('btnEntrar');
+            const mensagemErro = document.getElementById('mensagemErro');
+            
+            // Verificar se já está logado
+            const userLogado = JSON.parse(localStorage.getItem('user'));
+            if (userLogado) {
+                if (userLogado.tipo === 'admin') {
+                    window.location.href = 'admin.html';
+                } else if (userLogado.tipo === 'aluno') {
+                    window.location.href = 'aluno.html';
+                } else if (userLogado.tipo === 'porteiro') {
+                    window.location.href = 'porteiro.html';
+                }
+                return;
+            }
+
+            // Função para mostrar/ocultar campo de email
+            function toggleCampoEmail() {
+                if (selectUser.value === 'Aluno') {
+                    campoEmail.style.display = 'none';
+                    document.getElementById('Email').removeAttribute('required');
+                } else {
+                    campoEmail.style.display = 'block';
+                    document.getElementById('Email').setAttribute('required', 'required');
+                }
+            }
+            
+            selectUser.addEventListener('change', toggleCampoEmail);
+            
+            function mostrarErro(mensagem) {
+                mensagemErro.textContent = mensagem;
+                mensagemErro.style.display = 'block';
+                setTimeout(() => mensagemErro.style.display = 'none', 5000);
+            }
+
+            function fazerLogin() {
+                const tipoUser = selectUser.value;
+                const senha = document.getElementById('Senha').value;
+                
+                if (!tipoUser) {
+                    mostrarErro('Por favor, selecione o tipo de usuário');
+                    return;
+                }
+                
+                if (!senha) {
+                    mostrarErro('Por favor, insira a senha');
+                    return;
+                }
+                
+                if (tipoUser === 'Aluno') {
+                    loginAluno(senha);
+                } else {
+                    const email = document.getElementById('Email').value;
+                    
+                    if (!email) {
+                        mostrarErro('Por favor, insira o e-mail');
+                        return;
+                    }
+                    
+                    loginAdminProfessor(tipoUser, email, senha);
+                }
+            }
+            
+            function loginAluno(senha) {
+                const alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+                const aluno = alunos.find(a => a.senha === senha);
+                
+                if (aluno) {
+                    localStorage.setItem('user', JSON.stringify({
+                        id: aluno.id,
+                        nome: aluno.nome,
+                        email: aluno.email,
+                        tipo: 'aluno',
+                        turma: aluno.turma,
+                        classe: aluno.classe
+                    }));
+                    window.location.href = 'aluno.html';
+                } else {
+                    mostrarErro('Senha incorreta. Verifique a senha fornecida pelo administrador.');
+                }
+            }
+            
+           function loginAdminProfessor(tipo, email, senha) {
+    if (tipo === 'Admin') {
+        if (email === 'admin@colegio.com' && senha === 'admin123') {
+            localStorage.setItem('user', JSON.stringify({
+                nome: 'Administrador',
+                email: email,
+                tipo: 'admin'
+            }));
+            window.location.href = 'admin.html';
+        } else {
+            mostrarErro('E-mail ou senha incorretos');
+        }
+    } else if (tipo === 'Professor') { // Porteiro
+        if (email === 'porteiro@colegio.com' && senha === 'porteiro123') {
+            localStorage.setItem('user', JSON.stringify({
+                nome: 'Porteiro',
+                email: email,
+                tipo: 'porteiro'
+            }));
+            window.location.href = 'porteiros.html';
+        } else {
+            mostrarErro('E-mail ou senha incorretos');
+        }
+    }
+}
+            
+            btnEntrar.addEventListener('click', fazerLogin);
+            
+            document.getElementById('Senha').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') fazerLogin();
+            });
+            
+            document.getElementById('Email').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') fazerLogin();
+            });
+        });
+    </script>
+</body>
+</html>

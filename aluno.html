@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Aluno - Sistema de Assiduidade</title>
+    <link rel="stylesheet" href="aluno.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h3><i class="fas fa-qrcode me-2"></i> Controle de Assiduidade - Colégio Santa Ana & Noesa</h3>
+        <div class="user-info">
+            <span id="userNameDisplay">Aluno</span>
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                </button>
+                 
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" id="btnSair"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+   
+    <main>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fa fa-user me-2"></i> Meus Dados</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Nome:</strong> <span id="nome">Carregando...</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>E-mail:</strong> <span id="email">Carregando...</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Classe:</strong> <span id="classe">Carregando...</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Turma:</strong> <span id="turma">Carregando...</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>ID do Aluno:</strong> <span id="id">Carregando...</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Turno:</strong> <span id="turno">Carregando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fa fa-bar-chart me-2"></i> Minhas Estatísticas</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="estatistica-item">
+                                        <span class="estatistica-valor" id="presencas">0</span>
+                                        <span class="estatistica-label">Presenças</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="estatistica-item">
+                                        <span class="estatistica-valor" id="frequencia">0%</span>
+                                        <span class="estatistica-label">Frequência</span>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="estatistica-item">
+                                        <span class="estatistica-valor" id="TotalFaltas">0</span>
+                                        <span class="estatistica-label">Faltas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-qrcode me-2"></i> Meu QR Code</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div id="qrCodeContainer" class="mb-3">
+                                <img id="qrCodeImage" src="" alt="QR Code" style="max-width: 200px;">
+                            </div>
+                            <p class="text-muted">Apresente este QR Code na entrada da escola</p>
+                            <button class="btn btn-primary" id="btnBaixarQRCode">
+                                <i class="fas fa-download me-2"></i>Baixar QR Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se o usuário está logado
+            const userLogado = JSON.parse(localStorage.getItem('user'));
+            
+            if (!userLogado || userLogado.tipo !== 'aluno') {
+                // Se não estiver logado como aluno, redirecionar para o login
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Carregar dados do aluno
+            carregarDadosAluno(userLogado.id);
+
+            // Evento do botão sair
+            document.getElementById('btnSair').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            });
+        });
+
+        function carregarDadosAluno(alunoId) {
+            // Buscar alunos do localStorage
+            const alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+            const presencas = JSON.parse(localStorage.getItem('presencas')) || [];
+            
+            // Encontrar o aluno logado
+            const aluno = alunos.find(a => a.id === alunoId);
+            
+            if (aluno) {
+                // Atualizar nome do usuário no header
+                document.getElementById('userNameDisplay').textContent = aluno.nome.split(' ')[0];
+                
+                // Atualizar dados pessoais
+                document.getElementById('nome').textContent = aluno.nome;
+                document.getElementById('email').textContent = aluno.email || 'Não informado';
+                document.getElementById('classe').textContent = aluno.classe || 'Não informada';
+                document.getElementById('turma').textContent = aluno.turma || 'Não informada';
+                document.getElementById('id').textContent = aluno.id || 'Não informado';
+                document.getElementById('turno').textContent = aluno.turno || 'Não informado';
+                
+                // Carregar QR Code
+                if (aluno.qrCodeImagem) {
+                    document.getElementById('qrCodeImage').src = aluno.qrCodeImagem;
+                } else if (aluno.qrCode) {
+                    // Se não tiver imagem, mostrar o código
+                    document.getElementById('qrCodeContainer').innerHTML = `
+                        <div class="alert alert-info">
+                            Código: ${aluno.qrCode}
+                        </div>
+                    `;
+                }
+                
+                // Calcular estatísticas de presença
+                const presencasAluno = presencas.filter(p => p.alunoId === aluno.id);
+                const totalPresencas = presencasAluno.filter(p => p.presente).length;
+                const totalFaltas = presencasAluno.length - totalPresencas;
+                const frequencia = presencasAluno.length > 0 
+                    ? ((totalPresencas / presencasAluno.length) * 100).toFixed(1)
+                    : 0;
+                
+                document.getElementById('presencas').textContent = totalPresencas;
+                document.getElementById('TotalFaltas').textContent = totalFaltas;
+                document.getElementById('frequencia').textContent = frequencia + '%';
+                
+                // Adicionar cor baseada na frequência
+                const frequenciaElement = document.getElementById('frequencia');
+                if (frequencia >= 75) {
+                    frequenciaElement.style.color = '#28a745';
+                } else if (frequencia >= 50) {
+                    frequenciaElement.style.color = '#ffc107';
+                } else {
+                    frequenciaElement.style.color = '#dc3545';
+                }
+            } else {
+                // Se não encontrar o aluno, fazer logout
+                alert('Erro ao carregar dados do aluno. Faça login novamente.');
+                localStorage.removeItem('user');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Função para baixar QR Code
+        document.getElementById('btnBaixarQRCode')?.addEventListener('click', function() {
+            const userLogado = JSON.parse(localStorage.getItem('user'));
+            const alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+            const aluno = alunos.find(a => a.id === userLogado.id);
+            
+            if (aluno && aluno.qrCodeImagem) {
+                const link = document.createElement('a');
+                link.href = aluno.qrCodeImagem;
+                link.download = `QRCode_${aluno.nome.replace(/\s+/g, '_')}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('QR Code não disponível para download');
+            }
+        });
+    </script>
+</body>
+</html>

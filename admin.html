@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Assiduidade - Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Para exportar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <!-- Para exportar Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body>
+    <header>
+        <h3><i class="fas fa-qrcode me-2"></i> Controle de Assiduidade - Colégio Santa Ana & Noesa</h3>
+        <div class="user-info">
+            <span id="userNameDisplay">Admin</span>
+            <div class="dropdown">
+                
+                <button class="btn btn-link dropdown-toggle text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                    <i class="fa fa-user-circle" aria-hidden="true"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#" id="btnSair"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container-admin mudarConteudo-card-corpo">
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#" data-target="relatorios" class="nav-link active">Relatórios</a></li>
+                    <li><a href="#" data-target="turmas" class="nav-link">Turmas</a></li>
+                    <li><a href="#" data-target="alunos" class="nav-link">Alunos</a></li>
+                    <li><a href="#" data-target="auditoria" class="nav-link">Auditoria</a></li>
+                    <li><a href="#" data-target="administracao" class="nav-link">Administração</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="conteudo-container">
+            <!-- Relatórios -->
+            <div id="relatorios" class="conteudo-card active">
+                <div class="data">
+                    <label for="turma">Turma</label>
+                    <select name="tur" id="turma">
+                        <option value="">Todas as Turmas</option>
+                    </select>
+                    <label for="dataInicial">Data Inicial</label>
+                    <input type="date" name="dataI" id="dataInicial">
+                    <label for="dataF">Data Final</label>
+                    <input type="date" name="dataFi" id="dataF">
+                    <button class="gerarRelatorio">
+                        <i class="fas fa-chart-line me-1"></i>Gerar Relatórios
+                    </button>
+                </div>
+                <div class="btns">
+                    <button class="expPdf"><i class="fas fa-file-pdf me-1"></i>Exportar PDF</button>
+                    <button class="expExcel"><i class="fas fa-file-excel me-1"></i>Exportar Excel</button>
+                    <button class="backupDados"><i class="fas fa-save me-1"></i>Backup Dados</button>
+                    <button class="RestaurarDados"><i class="fas fa-upload me-1"></i>Restaurar Dados</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-cabecalho">
+                        <i class="fas fa-table me-2"></i> Relatórios de Presenças
+                    </div>
+                    <div class="card-corpo">
+                        <div class="tabela-responsiva">
+                            <table class="tabela">
+                                <thead>
+                                    <tr>
+                                        <th>Aluno</th>
+                                        <th>Turma</th>
+                                        <th>Presenças</th>
+                                        <th>Faltas</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5">Gere um relatório para ver os dados</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gerenciar Alunos -->
+            <div id="alunos" class="conteudo-card">
+                <div class="container-gerenciarAluno">
+                    <h4>Gerenciar Alunos</h4>
+                    <button id="btnAdicionarAluno"><i class="fas fa-plus me-1"></i>Adicionar Aluno</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-corpo">
+                        <div class="tabela-responsiva">
+                            <table class="tabela">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>Classe</th>
+                                        <th>Turma</th>
+                                        <th>QR Code</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6">Carregando alunos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gerenciar Turmas -->
+            <div id="turmas" class="conteudo-card">
+                <div class="container-gerenciarTurmas">
+                    <div class="gerenciarTurmas">
+                        <h4>Gerenciar Turmas</h4>
+                        <button id="btnAdicionarturma"><i class="fas fa-plus me-1"></i>Adicionar Turma</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-corpo">
+                        <h5 class="card-titulo">Turmas do curso</h5>
+                        <div class="lista">
+                            <div style="text-align: center;">Carregando turmas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auditoria -->
+            <div id="auditoria" class="conteudo-card">
+                <div class="container-logs">
+                    <div class="card">
+                        <div class="card-cabecalho">
+                            <i class="fas fa-clipboard-list me-2"></i>Logs de Auditoria
+                        </div>
+                        <div class="card-corpo">
+                            <div class="auditoria log">
+                                <div style="text-align: center;">Carregando logs...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Administração -->
+            <div id="administracao" class="conteudo-card card">
+                <div class="container-admin">
+                    <div class="card">
+                        <div class="card-cabecalho">
+                            <i class="fas fa-cog me-2"></i> Configurações do Sistema
+                        </div>
+                    </div>
+                    <div class="card-c">
+                        <div class="card-corpo admin-corpo">
+                            <h5>Armazenamento Local</h5>
+                            <p>Dados armazenados...</p>
+                            <div class="btnLimpar">
+                                <button><i class="fas fa-trash me-1"></i>Limpar Todos os Dados</button>
+                            </div>
+                            <div class="btnLincializar">
+                                <button><i class="fas fa-database me-1"></i>Inicializar dados</button>
+                            </div>
+                        </div>
+                        <div class="infoSistema">
+                            <h5>Informações do Sistema</h5>
+                            <p><strong>Versão:</strong>0</p>
+                            <p><strong>Alunos:</strong>0</p>
+                            <p><strong>Turmas:</strong>0</p>
+                            <p><strong>Presenças:</strong>0</p>
+                            <p><strong>Espaço utilizado:</strong>0 KB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Verificação de autenticação
+        (function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            
+            // Se não estiver logado ou não for admin, redirecionar para o login
+            if (!user || user.tipo !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Atualizar nome do usuário no header
+            document.addEventListener('DOMContentLoaded', function() {
+                const userNameDisplay = document.getElementById('userNameDisplay');
+                if (userNameDisplay) {
+                    userNameDisplay.textContent = user.nome || 'Admin';
+                }
+            });
+        })();
+
+        // Navegação entre abas
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const conteudoCards = document.querySelectorAll('.conteudo-card');
+
+            function mostrarConteudo(targetId) {
+                conteudoCards.forEach(card => card.classList.remove('active'));
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                const targetCard = document.getElementById(targetId);
+                const targetLink = document.querySelector(`[data-target="${targetId}"]`);
+                
+                if (targetCard) targetCard.classList.add('active');
+                if (targetLink) targetLink.classList.add('active');
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('data-target');
+                    mostrarConteudo(targetId);
+                    history.pushState({target: targetId}, '', `#${targetId}`);
+                });
+            });
+
+            window.addEventListener('popstate', (e) => {
+                if (e.state?.target) mostrarConteudo(e.state.target);
+            });
+
+            const hash = window.location.hash.substring(1);
+            const validarTargets = ['relatorios', 'alunos', 'turmas', 'auditoria', 'administracao'];
+            mostrarConteudo(validarTargets.includes(hash) ? hash : 'relatorios');
+
+            // Evento do botão sair
+            const btnSair = document.getElementById('btnSair');
+            if (btnSair) {
+                btnSair.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+    <script src="admin.js"></script>
+</body>
+</html>
